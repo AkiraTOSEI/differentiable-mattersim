@@ -10,11 +10,12 @@ handlers = {}
 def get_logger():
     if not handlers:
         logger.remove()
+        enqueue = os.environ.get("MATTERSIM_LOGURU_ENQUEUE", "1") != "0"
         handlers["console"] = logger.add(
             sys.stdout,
             colorize=True,
             filter=log_filter,
-            enqueue=True,
+            enqueue=enqueue,
         )
 
     return logger

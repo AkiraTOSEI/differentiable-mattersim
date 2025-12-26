@@ -1,0 +1,122 @@
+# 新規追加ファイルリスト
+
+## コア実装ファイル（4ファイル）
+
+1. src/mattersim/utils/geometry_torch.py
+   - torch ベースの幾何演算ユーティリティ
+   - 格子変換、座標変換など
+
+2. src/mattersim/datasets/utils/differentiable_convertor.py
+   - DifferentiableGraphBuilder クラス
+   - 固定トポロジーで微分可能な Graph 構築
+
+3. src/mattersim/forcefield/m3gnet/differentiable_m3gnet.py
+   - DifferentiableM3Gnet クラス
+   - 連続値 one-hot を扱う微分可能な M3GNet
+
+4. src/mattersim/forcefield/differentiable_potential.py
+   - DifferentiableMatterSimCalculator クラス
+   - メインの微分可能 API
+
+## テスト・デモファイル（4ファイル）
+
+5. tests/test_differentiable.py
+   - 回帰テスト、勾配テスト、最適化テスト
+   - 8つのテストケース
+
+6. scripts/generate_baseline.py
+   - Baseline データ生成スクリプト
+   - Diamond Si と FCC-Fe の出力を保存
+
+7. examples/differentiable_demo.py
+   - コマンドライン用デモスクリプト
+   - 3つのデモ（勾配、構造最適化、格子最適化）
+
+8. examples/differentiable_mattersim_demo.ipynb
+   - Jupyter Notebook 用デモ
+   - 5つのセクション（基本、構造最適化、格子最適化、同時最適化、まとめ）
+
+## データ・ドキュメントファイル（2ファイル）
+
+9. tests/data/baseline_outputs.json
+   - 回帰テスト用 baseline データ
+   - Diamond Si と FCC-Fe の出力
+
+10. docs/DIFFERENTIABLE_API.md
+    - API ドキュメント
+    - 使い方、制限事項、トラブルシューティングなど
+
+## 変更サマリーファイル（1ファイル）
+
+11. CHANGES.md
+    - このファイル
+    - 変更内容の詳細サマリー
+
+## 合計: 11ファイル
+
+
+
+ ---
+  📦 全体のサマリー
+
+  新規追加ファイル（11ファイル）
+
+  コア実装（4ファイル）
+
+  1. ✅ src/mattersim/utils/geometry_torch.py
+  2. ✅ src/mattersim/datasets/utils/differentiable_convertor.py
+  3. ✅ src/mattersim/forcefield/m3gnet/differentiable_m3gnet.py
+  4. ✅ src/mattersim/forcefield/differentiable_potential.py
+
+  テスト・デモ（4ファイル）
+
+  5. ✅ tests/test_differentiable.py
+  6. ✅ scripts/generate_baseline.py
+  7. ✅ examples/differentiable_demo.py
+  8. ✅ examples/differentiable_mattersim_demo.ipynb ← 新規作成
+
+  データ・ドキュメント（3ファイル）
+
+  9. ✅ tests/data/baseline_outputs.json
+  10. ✅ docs/DIFFERENTIABLE_API.md
+  11. ✅ CHANGES.md ← 新規作成
+  12. ✅ NEW_FILES_LIST.txt ← 新規作成
+
+  テスト結果
+
+  $ python tests/test_differentiable.py -v
+
+  全 8 テスト pass ✅
+
+  使用方法
+
+  Jupyter Notebook デモ
+
+  jupyter notebook examples/differentiable_mattersim_demo.ipynb
+
+  コマンドラインデモ
+
+  python examples/differentiable_demo.py
+
+  テスト実行
+
+  python tests/test_differentiable.py -v
+
+  コードでの使用
+
+  import torch
+  from ase.build import bulk
+  from mattersim.forcefield.differentiable_potential import DifferentiableMatterSimCalculator
+
+  si = bulk("Si", "diamond", a=5.43)
+  calc = DifferentiableMatterSimCalculator(device="cpu")
+
+  positions = torch.tensor(si.get_positions(), dtype=torch.float32, requires_grad=True)
+  output = calc.forward(si, positions=positions)
+  energy = output["total_energy"]
+
+  energy.backward()
+  print(positions.grad)  # 座標への勾配
+
+  ---
+  すべての実装が完了し、Jupyter Notebook デモと差分ファイルも作成しました！🎉
